@@ -5,7 +5,7 @@ from bs4 import BeautifulSoup
 
 url = input('Input the url to cite: ')
 page = requests.get(url)
-soup = BeautifulSoup(str(page.content), 'html.parser')
+soup = BeautifulSoup(str(page.text), 'html.parser')
 
 #div with some article info in it
 byline = soup.find(class_='byline')
@@ -45,14 +45,22 @@ if date:
 else:
     nice_date = '(N/A). '
 
-#find title
-title = soup.find('h1').contents[0]+'. '
+#find title and paper
+title_tag = soup.find('title').contents[0]
+#split into title and paper name
+title_tag = re.split(r' [-|] ',title_tag)
+if len(title_tag) != 1:
+    title = str(title_tag[0]+'. ')
+    paper = '*'+title_tag[1]+'*. ' 
+else:
+    title = 'N/A. '
+    paper = '*'+title+'*'
 
 #format 'retrieved from'
 retr = 'Retrieved from '+url
 
 #put citation together
-citation = '**'+nice_auth+nice_date+title+'*ABC News*. '+retr+'**'
+citation = '**'+nice_auth+nice_date+title+paper+retr+'**'
 
 #print the final citation
 print(citation)
