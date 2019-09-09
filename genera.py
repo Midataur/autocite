@@ -48,6 +48,7 @@ else:
 #find title and paper
 title_tag = soup.find('title').contents[0]
 #split into title and paper name
+#titles of webpages are usually formatted something like "Article title | Page title"
 title_tag = re.split(r' [-|] ',title_tag)
 if len(title_tag) != 1:
     title = str(title_tag[0]+'. ')
